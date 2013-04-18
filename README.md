@@ -13,10 +13,10 @@ Summary of how this Optiboot version works:
 - it looks for an external flash chip
 - if one is found (SPI returns valid data) it will further look
   for a new sketch flash image signature and size
-  starting at address 0:   FLXIMG:1234:XXXXXXXXXXX
+  starting at address 0:   FLXIMG:9999:XXXXXXXXXXX
   where: - 'FLXIMG' is fixed signature indicating FLASH chip
            contains a valid new flash image to be burned
-         - '1234' are 4 size bytes indicating how long the
+         - '9999' are 4 size bytes indicating how long the
            new flash image is (how many bytes to read)
          - 'XXXXXX' are the de-hexified bytes of the flash 
            pages to be burned
