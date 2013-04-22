@@ -169,7 +169,7 @@
 /**********************************************************/
 
 /**********************************************************/
-/* Edit History:  				  */
+/* Edit History:					  */
 /*							  */
 /* 4.4 WestfW: add initialization of address to keep      */
 /*             the compiler happy.  Change SC'ed targets. */
@@ -316,6 +316,8 @@ void appStart() __attribute__ ((naked));
 #define SPIFLASH_WRITEENABLE      0x06        // write enable
 #define SPIFLASH_ARRAYREADLOWFREQ 0x03        // read array (low frequency)
 #define SPIFLASH_BLOCKERASE_32K   0x52        // erase one 32K block of flash memory
+//#define DEBUG_ON                            // uncomment to enable Serial debugging 
+                                              // (will output different characters depending on which path the bootloader takes)
 
 uint8_t SPI_transfer(uint8_t _data) {
   SPDR = _data;
@@ -355,7 +357,9 @@ uint8_t FLASH_readByte(uint32_t addr) {
 }
 
 void CheckFlashImage() {
+#ifdef DEBUG_ON
   putch('F');
+#endif
   watchdogConfig(WATCHDOG_OFF);
   
   //SPI INIT
@@ -379,7 +383,9 @@ void CheckFlashImage() {
   //check if any flash image exists on external FLASH chip
   if (FLASH_readByte(0)=='F' && FLASH_readByte(1)=='L' && FLASH_readByte(2)=='X' && FLASH_readByte(6)==':' && FLASH_readByte(9)==':')
   {
+#ifdef DEBUG_ON
     putch('L');
+#endif
     
     uint16_t imagesize = (FLASH_readByte(7)<<8) | FLASH_readByte(8);
     if (imagesize%2!=0) return; //basic check that we got even # of bytes
@@ -389,7 +395,9 @@ void CheckFlashImage() {
     LED_PIN |= _BV(LED);
     for (i=0; i<imagesize; i+=2)
     {
+#ifdef DEBUG_ON
       putch('*');
+#endif
       
       //read 2 bytes (16 bits) from flash image, transfer them to page buffer
       b = FLASH_readByte(i+10); // flash image starts at position 10 on the external flash memory: FLX:XX:FLASH_IMAGE_BYTES_HERE...... (XX = two size bytes)
@@ -414,7 +422,9 @@ void CheckFlashImage() {
     boot_rww_enable();
 #endif
 
+#ifdef DEBUG_ON
     putch('E');
+#endif
 
     //erase the first 32K block where flash image resided
     FLASH_command(SPIFLASH_BLOCKERASE_32K, 1);
@@ -427,7 +437,9 @@ void CheckFlashImage() {
     watchdogConfig(WATCHDOG_16MS);  // short WDT timeout
     while (1); 		                  // and busy-loop so that WD causes a reset and app start
   }
+#ifdef DEBUG_ON
   putch('X');
+#endif
 }
 /******************* END SPI FLASH Code ****************************/
 
@@ -474,20 +486,21 @@ int main(void) {
 #endif
 #endif
 
-
-
   // Adaboot no-wait mod
   ch = MCUSR;
   MCUSR = 0;
-  
+
+#ifdef DEBUG_ON  
   putch('S');
-  putch(ch);
-  
+#endif
+
   if (!(ch & _BV(EXTRF))) //if not external reset
   {
     if (ch & _BV(WDRF)) //if reset by watchdog
       CheckFlashImage();
+#ifdef DEBUG_ON
     putch('A');
+#endif
     appStart();
   }
 
