@@ -316,6 +316,7 @@ void appStart() __attribute__ ((naked));
 #define SPIFLASH_WRITEENABLE      0x06        // write enable
 #define SPIFLASH_ARRAYREADLOWFREQ 0x03        // read array (low frequency)
 #define SPIFLASH_BLOCKERASE_32K   0x52        // erase one 32K block of flash memory
+#define SPIFLASH_JEDECID          0x9F        // read JEDEC ID
 //#define DEBUG_ON                            // uncomment to enable Serial debugging 
                                               // (will output different characters depending on which path the bootloader takes)
 
@@ -331,7 +332,7 @@ uint8_t FLASH_busy()
   SPI_transfer(SPIFLASH_STATUSREAD);
   uint8_t status = SPI_transfer(0);
   FLASH_UNSELECT;
-  return status & 1;  
+  return status & 1;
 }
 
 void FLASH_command(uint8_t cmd, uint8_t isWrite){
@@ -375,6 +376,13 @@ void CheckFlashImage() {
   // Warning: if the SS pin ever becomes a LOW INPUT then SPI automatically switches to Slave, so the data direction of the SS pin MUST be kept as OUTPUT.
   SPCR |= _BV(MSTR) | _BV(SPE); //enable SPI and set SPI to MASTER mode
 
+  //read first byte of JEDECID, if chip is present it should return a non-0 and non-FF value
+  FLASH_SELECT;
+  SPI_transfer(SPIFLASH_JEDECID);
+  uint8_t deviceId = SPI_transfer(0);
+  FLASH_UNSELECT;
+  if (deviceId==0 || deviceId==0xFF) return;
+  
   //global unprotect  
   FLASH_command(SPIFLASH_STATUSWRITE, 1);
   SPI_transfer(0);
