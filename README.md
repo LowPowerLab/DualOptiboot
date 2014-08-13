@@ -2,7 +2,7 @@ DualOptiboot
 ============
 
 Custom Optiboot to add wireless programming capability to Moteino
-Copyright Felix Rusu (2013), felix@lowpowerlab.com
+Copyright Felix Rusu (2013-2014), felix@lowpowerlab.com
 More at: http://lowpowerlab.com/Moteino
 
 This Optiboot version is modified to add the capability of reflashing 
@@ -34,3 +34,7 @@ arduino-install-dir\hardware\arduino\bootloaders\optiboot\
 Backup the original files andbefore overwrite both files.
 Then compile by running:
 make atmega328
+make atmega1284p
+
+##License
+GPL 3.0. See License.txt file.
