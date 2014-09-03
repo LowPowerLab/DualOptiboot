@@ -41,11 +41,11 @@
 // - it looks for an external flash chip
 // - if one is found (SPI returns valid data) it will further look
 //   for a new sketch flash image signature and size
-//   starting at address 0:   FLXIMG:1234:XXXXXXXXXXX
+//   starting at address 0:   FLXIMG:NN:XXXXXXXXXXX
 //   where: - 'FLXIMG' is fixed signature indicating FLASH chip
 //            contains a valid new flash image to be burned
-//          - '1234' are 4 size bytes indicating how long the
-//            new flash image is (how many bytes to read)
+//          - 'NN' are 2 size bytes (uint_16) indicating how long the
+//            new flash image is (how many bytes to read), max 65536Bytes
 //          - 'XXXXXX' are the de-hexified bytes of the flash 
 //            pages to be burned
 //          - ':' colons have fixed positions (delimiters)
