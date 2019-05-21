@@ -1,13 +1,14 @@
 DualOptiboot
 ============
 
-Custom Optiboot to add wireless programming capability to Moteino
-Copyright Felix Rusu (2013-2014), felix@lowpowerlab.com
+Customized Optiboot bootloader allows reflashing Moteino/AVR boards from an external serial FLASH memory chip.
+This makes it possible to wirelessly program a Moteino remotely by first transferring the compiled HEX binary wirelessly (ex. with an RFM69 transceiver), then restarting the board to allow the bootloader to pick it up and reflash the atmega's program area.
+Copyright Felix Rusu (2013-2019), lowpowerlab.com/contact
 More at: http://lowpowerlab.com/Moteino
 
 This Optiboot version is modified to add the capability of reflashing 
 from an external SPI flash memory chip. As configured this will work 
-with Moteino (www.lowpowerlab.com/Moteino) provided a SPI flash chip
+with [Moteino](www.lowpowerlab.com/guide/moteino) provided a SPI flash chip
 is present on the dedicated onboard footprint.
 Summary of how this Optiboot version works:
 - it looks for an external flash chip
