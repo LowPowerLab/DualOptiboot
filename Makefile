@@ -32,7 +32,7 @@
 
 #----------------------------------------------------------------------
 #
-# program name should not be changed...
+# program name should not be changed... ( it looks for optiboot.c !!!)
 PROGRAM    = optiboot
 
 # The default behavior is to build using tools that are in the users
@@ -246,6 +246,23 @@ atmega328: AVR_FREQ ?= 16000000L
 atmega328: LDSECTIONS  = -Wl,--section-start=.text=0x7c00 -Wl,--section-start=.version=0x7ffe
 atmega328: $(PROGRAM)_atmega328.hex
 atmega328: $(PROGRAM)_atmega328.lst
+
+atmega328_8MHZ: TARGET = atmega328
+atmega328_8MHZ: MCU_TARGET = atmega328p
+atmega328_8MHZ: CFLAGS += $(COMMON_OPTIONS)
+atmega328_8MHZ: AVR_FREQ ?= 8000000L
+#atmega328_8MHZ: BAUD_RATE = 57600
+atmega328_8MHZ: LDSECTIONS  = -Wl,--section-start=.text=0x7c00 -Wl,--section-start=.version=0x7ffe
+atmega328_8MHZ: $(PROGRAM)_atmega328_8MHZ.hex
+atmega328_8MHZ: $(PROGRAM)_atmega328_8MHZ.lst
+  
+atmega328_12MHZ: TARGET = atmega328
+atmega328_12MHZ: MCU_TARGET = atmega328p
+atmega328_12MHZ: CFLAGS += $(COMMON_OPTIONS)
+atmega328_12MHZ: AVR_FREQ ?= 12000000L
+atmega328_12MHZ: LDSECTIONS  = -Wl,--section-start=.text=0x7c00 -Wl,--section-start=.version=0x7ffe
+atmega328_12MHZ: $(PROGRAM)_atmega328_12MHZ.hex
+atmega328_12MHZ: $(PROGRAM)_atmega328_12MHZ.lst
 
 atmega328_isp: atmega328
 atmega328_isp: TARGET = atmega328
@@ -558,7 +575,7 @@ pro8_isp: isp
 atmega328_pro8: TARGET = atmega328_pro_8MHz
 atmega328_pro8: CHIP = atmega328
 atmega328_pro8:
-	$(MAKE) $(CHIP) AVR_FREQ=8000000L LED_START_FLASHES=3
+	$(MAKE) $(CHIP) AVR_FREQ=8000000L LED_START_FLASHES=2 BAUD_RATE=57600
 	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
 	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
 

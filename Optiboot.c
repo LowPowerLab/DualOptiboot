@@ -491,7 +491,7 @@ void appStart(uint8_t rstFlags) __attribute__ ((naked));
 #define SPIFLASH_WRITEENABLE      0x06        // write enable
 #define SPIFLASH_ARRAYREADLOWFREQ 0x03        // read array (low frequency)
 #define SPIFLASH_BLOCKERASE_32K   0x52        // erase one 32K block of flash memory
-#define SPIFLASH_BLOCKERASE_64K   0xD8        // erase one 32K block of flash memory
+#define SPIFLASH_BLOCKERASE_64K   0xD8        // erase one 64K block of flash memory
 #define SPIFLASH_JEDECID          0x9F        // read JEDEC ID
 //#define DEBUG_ON                            // uncomment to enable Serial debugging 
                                               // (will output different characters depending on which path the bootloader takes)
@@ -567,7 +567,7 @@ void CheckFlashImage() {
   if (deviceId==0 || deviceId==0xFF) return;
   
   //global unprotect  
-  FLASH_command(SPIFLASH_STATUSWRITE, 1);
+  FLASH_command(SPIFLASH_STATUSWRITE, 1); //takes ~10.5ms to clear
   SPI_transfer(0);
   FLASH_UNSELECT;
   
@@ -1043,6 +1043,7 @@ void watchdogReset() {
 }
 
 void watchdogConfig(uint8_t x) {
+  if (x == WATCHDOG_OFF) MCUSR &= ~(_BV(WDRF));
   WDTCSR = _BV(WDCE) | _BV(WDE);
   WDTCSR = x;
 }
