@@ -8,9 +8,10 @@ More at: http://lowpowerlab.com/Moteino
 
 This Optiboot version is modified to add the capability of reflashing 
 from an external SPI flash memory chip. As configured this will work 
-with [Moteino](www.lowpowerlab.com/guide/moteino) provided a SPI flash chip
+with [Moteinos](www.lowpowerlab.com/guide/moteino) provided a SPI flash chip
 is present on the dedicated onboard footprint.
-Summary of how this Optiboot version works:
+
+### Summary of how this Optiboot version works:
 - it looks for an external flash chip
 - if one is found (SPI returns valid data) it will further look
   for a new sketch flash image signature and size
@@ -33,9 +34,11 @@ The added code will result in a compiled size of just under 1kb
 To compile copy the Optiboot.c and Makefile files where Optiboot is originally located, mine is at:
 arduino-install-dir\hardware\arduino\bootloaders\optiboot\
 Backup the original files andbefore overwrite both files.
-Then compile by running:
-make atmega328
-make atmega1284p
 
-##License
+Then compile by running:
+- `make atmega328`
+- `make atmega1284p`
+- For Moteino-8Mhz: `make atmega328 AVR_FREQ=8000000L BAUD_RATE=57600`
+
+## License
 GPL 3.0. See License.txt file.
